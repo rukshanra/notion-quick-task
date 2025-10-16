@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quick Task → Notion</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: #f7f7f8;
+      margin: 0;
+      padding: max(3vh, 24px);
+    }
+    .card {
+      max-width: 560px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid #eaeaea;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .04);
+    }
+    h1 {
+      font-size: 20px;
+      margin: 0 0 6px;
+    }
+    p.hint {
+      margin: 0 0 18px;
+      color: #666;
+      font-size: 14px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin: 14px 0 6px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #1a73e8;
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, .2);
+    }
+    button {
+      background: #1a73e8;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      margin-top: 16px;
+      border-radius: 10px;
+    }
+    button:hover {
+      filter: brightness(1.05);
+    }
+    .ok {
+      color: #0b7;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .err {
+      color: #d22;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    footer {
+      text-align: center;
+      color: #888;
+      font-size: 12px;
+      margin-top: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Quick Task → Notion</h1>
+    <p class="hint">Type a task name, pick a project, press “Add Task”.</p>
+
+    <label for="task">Task name</label>
+    <input id="task" type="text" placeholder="e.g. Rent chairs" />
+
+    <label for="project">Related project</label>
+    <select id="project">
+      <option>DV-GENERAL</option>
+      <option>DV-ADMIN/HR</option>
+      <option>DV-FINANCE</option>
+      <option>DVTL-GENERAL</option>
+      <option>DVTL-ADMIN/HR</option>
+      <option>DVTL-FINANCE</option>
+      <option>CPLK-GENERAL</option>
+      <option>CPLK-ADMIN/HR</option>
+      <option>CPLK-FINANCE</option>
+      <option>PERSONAL-GENERAL</option>
+      <option>MADIWELA-GENEARAL</option>
+      <option>BATTARA-GENERAL</option>
+    </select>
+
+    <button id="submit">Add Task</button>
+
+    <div id="msg"></div>
+    <footer>Powered by Make → Notion</footer>
+  </div>
+
+  <script>
+    const HOOK_URL = "https://hook.eu1.make.com/665p9ndam9l7u53o99i8xrz8vsd2oa5q";
+
+    document.getElementById("submit").addEventListener("click", () => {
+      const task = document.getElementById("task").value.trim();
+      const project = document.getElementById("project").value.trim();
+      const msg = document.getElementById("msg");
+
+      if (!task) {
+        msg.className = "err";
+        msg.textContent = "⚠️ Please enter a task name.";
+        return;
+      }
+
+      const params = new URLSearchParams({ text: task, project });
+
+      fetch(`${HOOK_URL}?${params.toString()}`, { method: "GET" })
+        .then(res => {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          msg.className = "ok";
+          msg.textContent = "✅ Task sent to Notion!";
+          document.getElementById("task").value = "";
+        })
+        .catch(err => {
+          msg.className = "err";
+          msg.textContent = "❌ Error: " + err.message;
+        });
+    });
+  </script>
+</body>
+</html>
