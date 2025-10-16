@@ -5,74 +5,130 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Quick Task → Notion</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: #f7f7f8;
+      font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', system-ui, sans-serif;
+      background: #000;
       margin: 0;
-      padding: max(3vh, 24px);
+      padding: 20px 16px;
+      min-height: 100vh;
+      color: #fff;
+      line-height: 1.5;
     }
     .card {
-      max-width: 560px;
+      max-width: 375px;
       margin: 0 auto;
-      background: #fff;
-      border: 1px solid #eaeaea;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, .04);
+      background: #000;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 24px 20px;
     }
     h1 {
-      font-size: 20px;
-      margin: 0 0 6px;
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 8px;
+      text-align: center;
+      letter-spacing: -0.5px;
     }
     p.hint {
-      margin: 0 0 18px;
-      color: #666;
-      font-size: 14px;
+      margin: 0 0 32px;
+      color: #999;
+      font-size: 16px;
+      text-align: center;
+      font-weight: 400;
     }
     label {
       display: block;
       font-weight: 600;
-      margin: 14px 0 6px;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 12px;
       font-size: 16px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
+      margin: 24px 0 8px;
+      color: #fff;
+    }
+    input, select {
+      width: 100%;
+      padding: 16px;
+      font-size: 17px;
+      background: #000;
+      color: #fff;
+      border: 1px solid #333;
+      border-radius: 8px;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 20px;
+      padding-right: 44px;
     }
     input:focus, select:focus {
       outline: none;
-      border-color: #1a73e8;
-      box-shadow: 0 0 0 3px rgba(26, 115, 232, .2);
+      border-color: #fff;
+    }
+    input::placeholder {
+      color: #666;
     }
     button {
-      background: #1a73e8;
-      color: #fff;
+      width: 100%;
+      padding: 18px;
+      font-size: 17px;
       font-weight: 600;
-      cursor: pointer;
+      background: #fff;
+      color: #000;
       border: none;
-      margin-top: 16px;
-      border-radius: 10px;
+      border-radius: 8px;
+      margin-top: 32px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
-    button:hover {
-      filter: brightness(1.05);
+    button:active {
+      transform: scale(0.98);
+      transition: transform 0.1s;
     }
     .ok {
-      color: #0b7;
+      color: #fff;
       font-weight: 600;
-      margin-top: 10px;
+      margin-top: 16px;
+      padding: 12px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      text-align: center;
     }
     .err {
-      color: #d22;
+      color: #fff;
       font-weight: 600;
-      margin-top: 10px;
+      margin-top: 16px;
+      padding: 12px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      text-align: center;
     }
     footer {
       text-align: center;
-      color: #888;
-      font-size: 12px;
-      margin-top: 18px;
+      color: #666;
+      font-size: 14px;
+      margin-top: 32px;
+      font-weight: 400;
+    }
+    
+    /* iPhone safe area support */
+    @supports (padding: max(0px)) {
+      body {
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+      }
+    }
+    
+    /* Improved touch targets for mobile */
+    @media (max-width: 480px) {
+      input, select, button {
+        min-height: 44px;
+      }
     }
   </style>
 </head>
