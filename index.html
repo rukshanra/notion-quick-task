@@ -107,6 +107,36 @@
       border-radius: 8px;
       text-align: center;
     }
+    
+    /* Toast notification styles */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: #1a1a1a;
+      color: #fff;
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.3s ease;
+      border: 1px solid #333;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+    
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    .toast.success {
+      background: #1a3f1a;
+      border-color: #2a5f2a;
+    }
+    
     footer {
       text-align: center;
       color: #666;
@@ -121,6 +151,10 @@
         padding-left: max(16px, env(safe-area-inset-left));
         padding-right: max(16px, env(safe-area-inset-right));
         padding-bottom: max(20px, env(safe-area-inset-bottom));
+      }
+      
+      .toast {
+        top: max(20px, env(safe-area-inset-top));
       }
     }
     
@@ -152,7 +186,7 @@
       <option>CPLK-ADMIN/HR</option>
       <option>CPLK-FINANCE</option>
       <option>PERSONAL-GENERAL</option>
-      <option>MADIWELA-GENEARAL</option>
+      <option>MADIWELA-GENERAL</option>
       <option>BATTARA-GENERAL</option>
     </select>
 
@@ -164,6 +198,29 @@
 
   <script>
     const HOOK_URL = "https://hook.eu1.make.com/665p9ndam9l7u53o99i8xrz8vsd2oa5q";
+
+    function showToast(message, type = 'success') {
+      // Remove any existing toast
+      const existingToast = document.querySelector('.toast');
+      if (existingToast) {
+        existingToast.remove();
+      }
+      
+      // Create new toast
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      // Show toast
+      setTimeout(() => toast.classList.add('show'), 10);
+      
+      // Hide and remove toast after 3 seconds
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
 
     document.getElementById("submit").addEventListener("click", () => {
       const task = document.getElementById("task").value.trim();
@@ -181,9 +238,11 @@
       fetch(`${HOOK_URL}?${params.toString()}`, { method: "GET" })
         .then(res => {
           if (!res.ok) throw new Error("HTTP " + res.status);
-          msg.className = "ok";
-          msg.textContent = "✅ Task sent to Notion!";
+          showToast("✅ Task sent to Notion!");
           document.getElementById("task").value = "";
+          // Clear any existing error message
+          msg.textContent = "";
+          msg.className = "";
         })
         .catch(err => {
           msg.className = "err";
